@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-blockchain-price-tracker
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-price-tracker-app
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
